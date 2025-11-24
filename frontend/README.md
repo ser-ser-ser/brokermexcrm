@@ -1,69 +1,73 @@
-# Brokermex CRM — Esquema de Base de Datos
+# React + TypeScript + Vite
 
-Este repositorio contiene la estructura completa del backend del CRM inmobiliario **Brokermex V2**, basado en:
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-- Supabase (PostgreSQL)
-- RLS (Row Level Security)
-- Políticas de seguridad por usuario
-- Tablas optimizadas para flujo inmobiliario industrial, comercial y residencial
+Currently, two official plugins are available:
 
-## Archivos incluidos
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### `schema.sql`
-Contiene **toda la estructura de la base de datos**:
-- Extensiones (`pgcrypto`, `uuid-ossp`)
-- Tablas completas
-- Tipos de datos (`uuid[]`, `text[]`)
-- Llaves primarias y foráneas
-- Constraints y checks
+## React Compiler
 
-Es un archivo **autosuficiente** para restaurar la base completa en Supabase.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### `policies.sql`
-Contiene **todas las Row Level Security Policies**, necesarias para garantizar que:
-- Los brokers solo vean su información
-- Las propiedades compartidas funcionen correctamente
-- Oportunidades y pipeline sean privados
-- Los clientes tengan dueño asignado
-- Las integraciones sean seguras
+## Expanding the ESLint configuration
 
-### `ERD.svg`
-Diagrama visual del modelo de datos.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## ¿Qué es un ERD?
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-Significa **Entity Relationship Diagram**  
-En español: **Diagrama de Relaciones entre Entidades**.
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-Sirve para visualizar:
-- Tablas
-- Relaciones
-- Llaves primarias
-- Llaves foráneas
-- Estructura general del sistema
-
-Ideal para tu portafolio o documentación del proyecto.
-
-## Dónde colocar estos archivos
-
-Colócalos dentro de tu proyecto en la carpeta:
-
-```
-crm-inmobiliario-pro-v2/
-│
-├── database/
-│   ├── schema.sql
-│   ├── policies.sql
-│   └── ERD.svg
-│
-└── frontend/
-    └── (tu React + Supabase)
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## Cómo usarlos
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-Para restaurar o migrar la base en Supabase:
-1. Abrir **SQL Editor**
-2. Pegar el contenido de `schema.sql`
-3. Ejecutar
-4. Luego ejecutar `policies.sql`
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
