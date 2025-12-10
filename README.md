@@ -1,4 +1,4 @@
-BrokermexCRM
+NexoCRM
 
 Autor: Iván Carlo Tovilla Sánchez
 Licencia: Apache License 2.0
